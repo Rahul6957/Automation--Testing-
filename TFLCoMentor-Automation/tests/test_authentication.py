@@ -327,21 +327,15 @@ def test_create_test_opens_create_test_page(page):
 
     page.get_by_role("combobox").click()
     page.get_by_role("option", name="SME").click()
-
     page.get_by_label("Password").fill("12345")
     page.get_by_role("button", name="Login").click()
-
     page.wait_for_url("**/models/membership/dashboard")
-
     page.get_by_text("Tests Created", exact=True).click()
     page.wait_for_url("**/models/created-assessments")
-
     create_test_button = page.get_by_role("button", name="Create Test")
     assert create_test_button.is_visible()
-
     create_test_button.click()
     page.wait_for_url("**/models/create-test")
-
     assert page.url == "http://localhost:8081/models/create-test"
 
 
@@ -421,8 +415,6 @@ def test_add_question(page):
         timeout=10000,
     )
 
-    # Select the question setup details.
-        # Select the question setup details.
     question_type = page.get_by_role("combobox").nth(0)
     question_type.click()
     page.get_by_role("option", name="MCQ").click()
@@ -434,10 +426,8 @@ def test_add_question(page):
     status = page.get_by_role("combobox").nth(2)
     status.click()
     page.get_by_role("option", name="Approved").click()
-    # Open the question form.
     page.get_by_role("button", name="Add Questions").click()
 
-    # Fill in the question details.
     page.get_by_placeholder("Enter Question").fill(
         "Which platform runs Java applications?"
     )
@@ -448,7 +438,6 @@ def test_add_question(page):
     page.get_by_placeholder("Option C").fill("JRE")
     page.get_by_placeholder("Option D").fill("Javadoc")
 
-    # Select the correct answer.
     page.locator("select").last.select_option(label="Option A")
 
     # Submit the question and verify the success popup.
@@ -460,7 +449,6 @@ def test_add_question(page):
     dialog.accept()
 
 
-    # Create test 
 def test_create_test_with_selected_questions(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -473,15 +461,13 @@ def test_create_test_with_selected_questions(page):
 
     page.wait_for_url("**/models/membership/dashboard")
 
-    # Open the Tests Created page.
     page.get_by_text("Tests Created", exact=True).click()
     page.wait_for_url("**/models/created-assessments")
 
-    # Open the Create Test page.
     page.get_by_role("button", name="Create Test").click()
     page.wait_for_url("**/models/create-test")
 
-    # Fill in the test details.
+
     page.get_by_placeholder("Enter test name").fill("Automation Test")
     page.locator("select[name='difficultyLevel']").select_option("BEGINNER")
     page.get_by_placeholder("Enter description").fill(
@@ -498,7 +484,7 @@ def test_create_test_with_selected_questions(page):
         timeout=10000,
     )
 
-    # Select the question setup filters.
+
     question_type = page.get_by_role("combobox").nth(0)
     question_type.click()
     page.get_by_role("option", name="MCQ").click()
@@ -511,21 +497,18 @@ def test_create_test_with_selected_questions(page):
     status.click()
     page.get_by_role("option", name="Approved").click()
 
-    # Open the question list.
     page.get_by_role("button", name="Select Questions").click()
     page.get_by_text("Question ID:", exact=False).first.wait_for(
         state="visible",
         timeout=10000,
     )
-
-    # Select all questions shown in the list.
     checkboxes = page.locator("input[type='checkbox']")
     assert checkboxes.count() > 0
 
     for index in range(checkboxes.count()):
         checkboxes.nth(index).check()
 
-    # Create the test and verify the success popup.
+  
     with page.expect_event("dialog") as dialog_info:
         page.get_by_role("button", name="Create Test").click()
 
