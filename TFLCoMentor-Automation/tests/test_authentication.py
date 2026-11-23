@@ -5,14 +5,13 @@ def test_signin_button_visible(page):
     assert signin.is_visible()
 
 
-#  check sign in button is working or not
+
 def test_signin_navigation(page):
     page.goto("http://localhost:8081/")
     page.get_by_text("Sign In").click()
     assert page.url == "http://localhost:8081/models/membership/Login"
 
 
-#Login with valid credentials✅
 import pytest
 
 @pytest.mark.parametrize("role, dashboard", [
@@ -41,9 +40,6 @@ def test_role_login(page, role, dashboard):
     assert page.url.endswith("/models/membership/dashboard")
 
 
-
-
-#Login with invalid credentials✅ wrong password
 def test_invalid_login(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -62,7 +58,6 @@ def test_invalid_login(page):
 
 
 
-## test_wrong_role_login
 def test_wrong_role_login(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -78,8 +73,7 @@ def test_wrong_role_login(page):
     page.wait_for_timeout(2000)
 
     assert page.url.endswith("/models/membership/Login")
-    
-# check empty Role
+
 def test_empty_role(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -99,7 +93,6 @@ def test_empty_role(page):
 
 
 
-#check test_empty_password
 def test_empty_password(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -123,7 +116,7 @@ def test_empty_password(page):
 
 
 
-#test_empty_contact_number
+
 def test_empty_contact_number(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
