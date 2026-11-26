@@ -146,12 +146,10 @@ def test_register_navigation(page):
     print("HTML:", register.evaluate("(element) => element.outerHTML"))
 
     
-"""import time # We use import time to generate a unique email and contact number every time the registration test runs.
-
+import time
 def test_register_valid_details(page):
     page.goto("http://localhost:8081/models/membership/Register")
 
-    # Generate unique email and contact for every test run
     unique_id = str(time.time_ns())[-8:]
 
     page.get_by_label("First Name").fill("Rahul")
@@ -161,19 +159,16 @@ def test_register_valid_details(page):
 
     page.get_by_role("button", name="Register").click()
 
-    # Verify successful registration
     page.get_by_text("Registration successful").wait_for(
         state="visible",
         timeout=10000
     )
 
-    # Verify redirect to Login page
     page.wait_for_url("**/models/membership/Login", timeout=10000)
 
     assert page.url.endswith("/Login")
 
-    
-# test_register_existing_email
+
 def test_register_existing_email(page):
     page.goto("http://localhost:8081/models/membership/Register")
 
@@ -184,17 +179,13 @@ def test_register_existing_email(page):
 
     page.get_by_role("button", name="Register").click()
 
-    # Verify duplicate email error
     page.get_by_text("Email already exists").wait_for(
         state="visible",
         timeout=10000
     )
-"""
 
-
-# Login with valid SME credentials
 def test_sme_login(page):
-    # Listen for the roles API response before opening the login page.
+
     with page.expect_response(
         lambda response: (
             "/roles/getAllRoles" in response.url and response.ok
@@ -226,8 +217,6 @@ def test_sme_login(page):
     assert current_user["role_id"] == sme_role["role_id"]
 
 
-
-    # Verify that the Tests created option is visible on the SME dashboard
 def test_sme_dashboard_tests_created_visible(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -244,8 +233,6 @@ def test_sme_dashboard_tests_created_visible(page):
     tests_created_option = page.get_by_text("Tests Created", exact=True)
     assert tests_created_option.is_visible()
 
-
-# Verify that the Tests Created card opens the created assessments page
 def test_sme_tests_created_opens_assessments_page(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -269,7 +256,6 @@ def test_sme_tests_created_opens_assessments_page(page):
     assert page.url == "http://localhost:8081/models/created-assessments"
 
 
-    # Verify that the Create Test button is visible on the assessments dashboard
 def test_create_test_button_visible(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -291,7 +277,6 @@ def test_create_test_button_visible(page):
 
 
 
-# Verify that the Create Test button is visible on the assessments dashboard
 def test_create_test_button_visible(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -312,7 +297,6 @@ def test_create_test_button_visible(page):
     assert create_test_button.is_visible()
 
 
-# Verify that Create Test opens the create-test page
 def test_create_test_opens_create_test_page(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -333,7 +317,6 @@ def test_create_test_opens_create_test_page(page):
 
 
 
-# Verify that submitting the Create Test 
 def test_create_test_opens_question_setup(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
@@ -351,7 +334,6 @@ def test_create_test_opens_question_setup(page):
     page.get_by_role("button", name="Create Test").click()
     page.wait_for_url("**/models/create-test")
 
-    # Fill the required test details.
     page.get_by_placeholder("Enter test name").fill("Automation Test")
     page.locator("select[name='difficultyLevel']").select_option("BEGINNER")
     page.get_by_placeholder("Enter description").fill(
@@ -370,11 +352,9 @@ def test_create_test_opens_question_setup(page):
     assert page.get_by_text("Test: Automation Test").is_visible()
 
 
-  # Verify that an SME add Question
 def test_add_question(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
-    # Log in as SME.
     page.get_by_label("Contact Number").fill("7972542628")
     page.get_by_role("combobox").click()
     page.get_by_role("option", name="SME").click()
@@ -383,15 +363,12 @@ def test_add_question(page):
 
     page.wait_for_url("**/models/membership/dashboard")
 
-    # Open the Tests Created page.
     page.get_by_text("Tests Created", exact=True).click()
     page.wait_for_url("**/models/created-assessments")
 
-    # Open the Create Test page.
     page.get_by_role("button", name="Create Test").click()
     page.wait_for_url("**/models/create-test")
 
-    # Fill in the test details.
     page.get_by_placeholder("Enter test name").fill("Automation Test")
     page.locator("select[name='difficultyLevel']").select_option("BEGINNER")
     page.get_by_placeholder("Enter description").fill(
@@ -402,7 +379,6 @@ def test_add_question(page):
     page.get_by_role("button", name="Create New Test").click()
     page.wait_for_url("**/models/question-options")
 
-    # Wait for the Question Setup page to render.
     page.get_by_text("Question Setup", exact=True).wait_for(
         state="visible",
         timeout=10000,
@@ -433,7 +409,8 @@ def test_add_question(page):
 
     page.locator("select").last.select_option(label="Option A")
 
-    # Submit the question and verify the success popup.
+
+
     with page.expect_event("dialog") as dialog_info:
         page.get_by_role("button", name="Submit").click()
 
@@ -445,7 +422,6 @@ def test_add_question(page):
 def test_create_test_with_selected_questions(page):
     page.goto("http://localhost:8081/models/membership/Login")
 
-    # Log in as SME.
     page.get_by_label("Contact Number").fill("7972542628")
     page.get_by_role("combobox").click()
     page.get_by_role("option", name="SME").click()
@@ -471,7 +447,6 @@ def test_create_test_with_selected_questions(page):
     page.get_by_role("button", name="Create New Test").click()
     page.wait_for_url("**/models/question-options")
 
-    # Wait for the Question Setup page to render.
     page.get_by_text("Question Setup", exact=True).wait_for(
         state="visible",
         timeout=10000,
